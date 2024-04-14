@@ -1,25 +1,14 @@
 import { Command } from 'commander';
+import { websites, Websites } from './websiteURL.js';
 import { exec } from 'child_process'; 
-
-interface Websites {
-    [key: string]: string;
-}
 
 export function openSite(program: Command) {
     program
         .command('open <site>')
         .description('Open a specific website in the default browser')
         .action((site: string) => {
-            const websites: Websites = {
-                "google": "https://www.google.com",
-                "notion": "https://www.notion.so",
-                "github": "https://www.github.com",
-                "gpt": "https://chat.openai.com",
-                "medium": "https://www.medium.com",
-                "chemwebapp": "https://github.com/cics-web-dev/Chem-Web-App",
-            }
 
-            const url = websites[site];
+            const url = websites[site as keyof Websites];
             if (url) {
                 console.log(`Opening ${site} at ${url}`);
                 openBrowser(url);

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { openSite } from "./commands/openSite.js";
+import { openSite } from "./commands/openSite/openSite.js";
+import { contribution } from "./commands/contributions/checkContribution.js";
 
 const program = new Command();
 
@@ -13,6 +14,7 @@ program
 
 
 openSite(program);
+contribution(program);
 
 // parse the command line arguments
 program.parse(process.argv);

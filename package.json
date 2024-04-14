@@ -1,11 +1,11 @@
 {
-  "name": "Yogo",
+  "name": "yogo",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node src/index.ts",
-    "test": "nodemon src/index.ts"
+    "start": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -13,9 +13,11 @@
   "dependencies": {
     "@types/node": "^18.0.6",
     "commander": "^12.0.0",
-    "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
-  "description": ""
+  "description": "",
+  "bin": {
+    "yogo": "./dist/index.js"
+  }
 }

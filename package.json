@@ -18,6 +18,6 @@
   },
   "description": "",
   "bin": {
-    "yogo": "./dist/index.js"
+    "yo": "./dist/index.js"
   }
 }

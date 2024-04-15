@@ -1,8 +1,8 @@
 import { Command } from 'commander';
 import { websites, Websites } from './websiteURL.js';
-import { exec } from 'child_process'; 
+import { exec } from 'child_process';
 
-export function openSite(program: Command) {
+export function openSite(program: Command): void {
     program
         .command('open <site>')
         .description('Open a specific website in the default browser')
@@ -20,8 +20,8 @@ export function openSite(program: Command) {
         .on('--help', () => {
             console.log('');
             console.log('Examples:');
-            console.log('  $ openSite open google');
-            console.log('  $ openSite open notion');
+            console.log('  $ yo open google');
+            console.log('  $ yo open notion');
         });
 }
 

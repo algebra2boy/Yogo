@@ -6,14 +6,14 @@ import chalk from "chalk";
 
 import { openSite } from "./commands/openSite/openSite.js";
 import { contribution } from "./commands/contributions/checkContribution.js";
+import { imageGenerator } from "./commands/imageGenerator/imageGenerator.js";
 
 const program = new Command();
 
 // cool ASCII character
 console.log(
-  chalk.blueBright(figlet.textSync("YOGO", {
+  chalk.blue(figlet.textSync("YOGO", {
     font: "3D-ASCII",
-    width: 100,
     whitespaceBreak: true
   }))
 );
@@ -27,6 +27,7 @@ program
 
 openSite(program);
 contribution(program);
+imageGenerator(program);
 
 // parse the command line arguments
 program.parse(process.argv);

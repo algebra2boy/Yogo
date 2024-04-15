@@ -9,7 +9,7 @@ import type {
 } from './contribution.d.ts';
 import fetch from 'node-fetch'; // fetch is not supported prior nodejs.18 but i am using nodejs.17 
 
-export function contribution(program: Command) {
+export function contribution(program: Command): void {
     program
         .command('contribution')
         .description('Check your number of contribution on GitHub contribution calendar.')

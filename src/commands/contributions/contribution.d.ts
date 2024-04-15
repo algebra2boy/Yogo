@@ -4,7 +4,7 @@ export interface Options {
     today?: boolean;
     week?: boolean;
     month?: boolean;
-    count: number;
+    count?: string;
 }
 
 export interface ContributionGraphQLResponse {

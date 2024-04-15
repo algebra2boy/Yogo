@@ -37,7 +37,8 @@ Options:
 - `--today`: Get today's contributions.
 - `--week`: Get this week's contributions.
 - `--month`: Get this month's contributions (excluding the current week).
-- `-c, --count <count>`: Get the number of contributions for the first n week(s) on the calendar.
+- `-c, --count <count>`: Get the number of contributions for the first/last n week(s) on the calendar.
+- `-f, --filter <filter>`: Filter by the number of contributions on the calendar.
 
 ```
 Examples:
@@ -54,8 +55,11 @@ $ yogo contribution --name <github username> --week
 $ yogo contribution --name <github username> --month 
 
 # To get contributions for a specific number of weeks:
-$ yogo contribution --name <github username> -c <count>
-$ yogo contribution --name <github username> --count <count>
+$ yogo contribution --name <github username> -c 3
+$ yogo contribution --name <github username> --count -2
+
+# To filter contribution
+$ yogo contribution --name <github username> -f 20
 ```
 
 ## Important Link

@@ -19,6 +19,7 @@ export function contribution(program: Command) {
         .option('--week', 'Get this week\'s contributions.')
         .option('--month', 'Get this month\'s contributions (not including current week).')
         .option('-c, --count <count>', 'Get the number of contributions for the first n week(s) on calendar.')
+        .option('-f, --filter <filter>', 'Filter by the number of contributions on the calendar')
         .action(async (options: Options) => {
             console.log("Checking your contributions...");
 
@@ -60,6 +61,13 @@ export function contribution(program: Command) {
                 const firstNWeeksContributions: number = getFirstNWeeksContributions(calendar, count);
                 console.log(`${count > 0 ? "First" : "Last"} ${absCount} ${absCount === 1 ? "Week" : "Weeks"} contributions on GitHub calendar for ${options.name}: ${firstNWeeksContributions}`);
 
+            } else if (options.filter) {
+
+                const filter = parseInt(options.filter);
+
+                const filteredContributionByDays = filterContributionByDay(calendar, filter);
+                console.log(`Total number of filtered contributions by day are ${filteredContributionByDays} with filter=${filter}`);
+
             }
 
         })
@@ -75,15 +83,15 @@ export function contribution(program: Command) {
  * We would need to check if user inputs are provided or not.
  */
 function isOptionsValid(options: Options): boolean {
-    const { all, name, today, week, month, count } = options;
+    const { all, name, today, week, month, count, filter } = options;
 
     if (!name) {
         console.log("Please provide a GitHub username using --name <github name>.\n");
         return false;
     }
 
-    if (!all && !today && !week && !month && !count) {
-        console.log("Please specify one of the following options: -a/--all, --today, --week, --month or -c/--count <count>.\n");
+    if (!all && !today && !week && !month && !count && !filter) {
+        console.log("Please specify one of the following options: -a/--all, --today, --week, --month, -c/--count <count> or -f/--filter <filter>.\n");
         return false;
     }
 
@@ -218,3 +226,23 @@ function getFirstNWeeksContributions(calendar: ContributionCalendar, n: number):
 
     return totalContributionsForFirstNWeeks;
 }
+
+function filterContributionByDay(calendar: ContributionCalendar, n: number): number {
+
+    if (n <= 0) {
+        console.log("Please provide a number greater than 0.");
+        process.exit(1);
+    }
+
+    const contributionDays: ContributionDay[] = calendar.weeks.flatMap((week) => week.contributionDays.flatMap(day => day));
+
+    const filteredContributionDays: ContributionDay[] = contributionDays.filter((day: ContributionDay) => {
+        return day.contributionCount >= n
+    });
+
+    filteredContributionDays.forEach((day: ContributionDay) => {
+        console.log(`Date: ${day.date}, Contributions: ${day.contributionCount}`);
+    });
+
+    return filteredContributionDays.length;
+};

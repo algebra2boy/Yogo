@@ -5,6 +5,7 @@ export interface Options {
     week?: boolean;
     month?: boolean;
     count?: string;
+    filter?: string;
 }
 
 export interface ContributionGraphQLResponse {

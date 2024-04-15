@@ -18,6 +18,8 @@ console.log(
   }))
 );
 
+console.log(chalk.green("Welcome to YOGO!"));
+
 program
   .name("yogo")
   .version("v1.0.0", "-v, --version", "Output the current version")

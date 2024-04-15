@@ -101,7 +101,7 @@ function isOptionsValid(options: Options): boolean {
 async function setUpGraphQLRequest(userName: string): Promise<ContributionGraphQLResponse> {
 
     if (!process.env.GITHUB_TOKEN) {
-        console.log("Please provide a GitHub token in the .env file");
+        console.log("Please provide a GitHub token in the .env file or set it up as an environment variable.");
         console.log("Set up env variable in your OS: https://www.cyberciti.biz/faq/linux-list-all-environment-variables-env-command/")
         process.exit(1);
     }

@@ -4,11 +4,7 @@ import OpenAI from "openai";
 import ora, { Ora } from 'ora';
 import fetch from 'node-fetch';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
-import path, { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import path from 'path';
 
 export function imageGenerator(program: Command): void {
     program
@@ -20,7 +16,7 @@ export function imageGenerator(program: Command): void {
 
             const imageURL: string = await sendOpenAIRequest(options);
 
-            console.log(`Image URL: ${imageURL}`);
+            console.log(`Image URL (expired in 60 minutes): ${imageURL}`);
 
             await saveImageLocally(imageURL);
 
@@ -61,6 +57,11 @@ async function askUserInput(): Promise<ImageGeneratorOptions> {
 }
 
 async function sendOpenAIRequest(options: ImageGeneratorOptions): Promise<string> {
+
+    if (!process.env.OPENAI_API_KEY) {
+        console.error("Please set the OPENAI_API_KEY environment variable.");
+        process.exit(1);
+    }
 
     const openai: OpenAI = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -107,38 +108,39 @@ async function saveImageLocally(imageURL: string): Promise<void> {
 
     const spinner: Ora = ora('Saving image locally....').start("please wait...");
 
-    // create a folder to save the images (folder name is images)
-    const folderPath: string = path.join(__dirname, 'images');
+    // create a folder in the root directory to save the images (folder name is "images")
+    const folderPath: string = path.resolve(process.cwd(), 'images');
 
     if (!fs.existsSync(folderPath)) { // check if the folder exists
         fs.mkdirSync(folderPath);  // if not, create the folder
     }
 
-    const filename: string = path.basename(imageURL); // get the filename from the URL
-
-    const imagePath: string = path.join(folderPath, filename); // combine the folder path and the filename
-
-    const fileStream: fs.WriteStream = fs.createWriteStream(imagePath); // create a write stream to save the image
-
     try {
         const response = await fetch(imageURL); // fetch the image from the URL
 
-        const badResponse: boolean = !response.ok || !response || !response.body;
-        
+        const badResponse: boolean = !response || !response.ok || !response.body;
+
         if (badResponse) {
             spinner.fail('Failed to save image:');
             console.error("Failed to fetch image from the URL");
             process.exit(1);
         }
 
-        
+        // Count the number of images in the images folder
+        const files: string[] = fs.readdirSync(folderPath);
+        const imageCount: number = files.length;
 
-        await new Promise((resolve, reject) => {
-            fileStream.on('finish', resolve); // resolve the promise when the file stream is finished
-            fileStream.on('error', reject); // reject the promise if there is an error
-        });
+        // image path to save the image
+        const imagePath: string = path.join(folderPath, `image-${imageCount + 1}.png`);
+
+        // create a write stream to save the image (channeling the image data to the file system)
+        const writeStream: fs.WriteStream = fs.createWriteStream(imagePath);
+
+        // pipe the image data to the write stream
+        response.body!.pipe(writeStream);
 
         spinner.succeed(`Image saved successfully. Please check the images folder`);
+
     } catch (error) {
         spinner.fail("Failed to save image:");
     }

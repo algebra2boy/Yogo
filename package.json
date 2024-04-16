@@ -25,7 +25,7 @@
   },
   "description": "",
   "bin": {
-    "yo": "ts-node src/index.ts"
+    "yo": "./dist/index.js"
   },
   "devDependencies": {
     "@types/figlet": "^1.5.8"

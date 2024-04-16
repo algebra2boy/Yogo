@@ -13,22 +13,22 @@ npm link
 ```
 
 ## Command line
-1. `yogo -v` or `yogo --version`: outputs the current version
-2. `yogo -h` or `yogo --help`: lists all the command and flags
-3. `yogo open <site>`
+1. `yo -v` or `yo --version`: outputs the current version
+2. `yo -h` or `yo --help`: lists all the command and flags
+3. `yo open <site>`
     - Allows you to open your desired website without visiting a browser.
     - Currently supports three operating system: macOS, Windows, and Linux. 
     - You can add any website shortcut and its url in `src/commands/openSite/websiteURL.ts`.
 ```bash
 # Examples
-yogo open canvas
-yogo open notion
-yogo open gpt
+yo open canvas
+yo open notion
+yo open gpt
 ```
 
 4. To check your GitHub contributions, use the following command:
 ```
-yogo contribution [options]
+yo contribution [options]
 ```
 
 Options:

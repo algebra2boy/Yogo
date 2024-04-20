@@ -95,6 +95,16 @@ function isOptionsValid(options: Options): boolean {
         return false;
     }
 
+    if (count && !Number.isInteger(parseInt(count))) {
+        console.log("Please provide a valid number for count option.");
+        return false;
+    }
+
+    if (filter && !Number.isInteger(parseInt(filter))) {
+        console.log("Please provide a valid number for filter option.");
+        return false;
+    }
+
     return true;
 }
 

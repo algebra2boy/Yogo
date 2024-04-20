@@ -7,6 +7,7 @@ import chalk from "chalk";
 import { openSite } from "./commands/openSite/openSite.js";
 import { contribution } from "./commands/contributions/checkContribution.js";
 import { imageGenerator } from "./commands/imageGenerator/imageGenerator.js";
+import { dogAscii } from "./commands/dogAscii/dogAscii.js";
 
 const program = new Command();
 
@@ -21,7 +22,7 @@ console.log(
 console.log(chalk.green("Welcome to YOGO!"));
 
 program
-  .name("yogo")
+  .name("yo")
   .version("v1.0.0", "-v, --version", "Output the current version")
   .description("A simple CLI for accelerating your development process")
   .helpCommand(true); // Add help flag
@@ -30,6 +31,7 @@ program
 openSite(program);
 contribution(program);
 imageGenerator(program);
+dogAscii(program);
 
 // parse the command line arguments
 program.parse(process.argv);

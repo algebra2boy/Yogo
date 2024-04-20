@@ -1,7 +1,10 @@
 import { Command } from 'commander';
 import fetch from 'node-fetch';
-import Jimp from 'jimp';
 
+// @ts-ignore
+import imageToAscii from "image-to-ascii";
+
+// Recommend to download: https://github.com/IonicaBizau/image-to-ascii/blob/a375f896214429f01d552502a69e889d1b1c00ee/INSTALLATION.md
 export function dogAscii(program: Command): void {
     program
         .command('dog')
@@ -20,9 +23,12 @@ export async function performDogAscii(option: { count: string }): Promise<void> 
     }
 
     const dogAPIResponse = await sendRequestToDogAPI(parseInt(count));
-    console.log(dogAPIResponse);
     const URL = dogAPIResponse.message;
-    imageToAsciiFromURL(URL as string);
+    if (Array.isArray(URL)) {
+        URL.forEach((url) => imageToAsciiFromURL(url));
+    } else {
+        imageToAsciiFromURL(URL);
+    }
 }
 
 interface DogAPIResponse {
@@ -43,32 +49,10 @@ export async function sendRequestToDogAPI(count?: number): Promise<DogAPIRespons
 }
 
 
-async function imageToAsciiFromURL(imageURL: string) {
-
-    // ASCII characters set from dark to light
-    const asciiChars = ' .:-=+*#%@';
-    console.log(imageURL);
-    try {
-
-        const image = await Jimp.read(imageURL);
-        image.resize(80, Jimp.AUTO) // Resize image to fit output width
-            .greyscale()           // Convert to greyscale
-            .contrast(1);          // Optional: Increase contrast for better ASCII output
-
-        for (let y = 0; y < image.bitmap.height; y++) {
-            let line = '';
-            for (let x = 0; x < image.bitmap.width; x++) {
-                const idx = image.getPixelIndex(x, y);
-                const red = image.bitmap.data[idx + 0];
-                const green = image.bitmap.data[idx + 1];
-                const blue = image.bitmap.data[idx + 2];
-                const brightness = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
-                const character = asciiChars[Math.floor(brightness * (asciiChars.length - 1))];
-                line += character;
-            }
-            console.log(line);
-        }
-    } catch (err) {
-        console.error('Error:', err);
-    }
+function imageToAsciiFromURL(imageURL: string) {
+    imageToAscii(imageURL, (err: any, converted: any) => {
+        console.log("url of the image: " + imageURL);
+        console.log(err || converted);
+        console.log("\n");
+    });
 }
